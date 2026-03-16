@@ -6,7 +6,8 @@
       "Bash(npm run:*)",
       "Bash(gh auth status)",
       "Bash(git --version)",
-      "Bash(git init)"
+      "Bash(git init)",
+      "Bash(claude plugin:*)"
     ]
   }
 }

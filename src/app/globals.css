@@ -2,17 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
-  --foreground: #1a1a1a;
-  --background: #ffffff;
+  --terracotta: #c77854;
+  --sand: #e6d5c3;
+  --cream: #faf8f5;
+  --gold: #d4a574;
+  --ink: #2a2520;
 }
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
 /* Smooth scrolling */
@@ -27,14 +37,89 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #faf8f5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: #d4a574;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1a1;
+  background: #c77854;
+}
+
+/* Selection */
+::selection {
+  background: rgba(199, 120, 84, 0.2);
+  color: var(--ink);
+}
+
+/* Decorative arch shape */
+.arch-decoration::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 60px;
+  border: 2px solid var(--gold);
+  border-bottom: none;
+  border-radius: 100px 100px 0 0;
+  opacity: 0.3;
+}
+
+/* Zellige pattern overlay */
+.zellige-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c77854' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Luxury animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Elegant link underline */
+.elegant-underline {
+  position: relative;
+}
+
+.elegant-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), var(--terracotta));
+  transition: width 0.3s ease;
+}
+
+.elegant-underline:hover::after {
+  width: 100%;
 }

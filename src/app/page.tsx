@@ -23,19 +23,19 @@ export default async function HomePage() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-cream-200">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">No Profile Found</h1>
-          <p className="text-gray-600">Please run the database seed script.</p>
+          <h1 className="font-serif text-3xl text-ink-900 mb-4">No Profile Found</h1>
+          <p className="text-ink-600 font-light">Please run the database seed script.</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-cream-200">
       <Navbar />
-      <main className="pt-16">
+      <main>
         <Hero profile={profile} />
         <About profile={profile} />
         <Skills skills={skills} />

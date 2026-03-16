@@ -86,3 +86,16 @@ model Language {
 
   @@map("languages")
 }
+
+// Activities with images and descriptions
+model Activity {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String   // Path to uploaded image
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("activities")
+}
