@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { educationSchema } from '@/lib/validations'
 
 // GET - Fetch all education
 export async function GET() {
@@ -26,20 +27,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const data = await request.json()
-    const maxOrder = await prisma.education.count()
+    const body = await request.json()
+    const validatedData = educationSchema.parse(body)
+
+    // Get max order value
+    const maxOrder = await prisma.education.aggregate({
+      _max: { order: true },
+    })
 
     const education = await prisma.education.create({
       data: {
-        ...data,
-        startDate: new Date(data.startDate),
-        endDate: data.endDate ? new Date(data.endDate) : null,
-        order: maxOrder,
+        school: validatedData.school,
+        degree: validatedData.degree,
+        field: validatedData.field,
+        location: validatedData.location ?? null,
+        startDate: new Date(validatedData.startDate),
+        endDate: validatedData.endDate ? new Date(validatedData.endDate) : null,
+        current: validatedData.current ?? false,
+        description: validatedData.description ?? null,
+        order: (maxOrder._max.order ?? -1) + 1,
       },
     })
 
     return NextResponse.json(education)
   } catch (error) {
+    console.error('POST education error:', error)
     return NextResponse.json(
       { error: 'Failed to create education' },
       { status: 500 }

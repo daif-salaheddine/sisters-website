@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { experienceSchema } from '@/lib/validations'
 
 // GET - Fetch all experiences
 export async function GET() {
@@ -26,22 +27,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const data = await request.json()
+    const body = await request.json()
+    const validatedData = experienceSchema.parse(body)
 
-    // Get max order
-    const maxOrder = await prisma.experience.count()
+    // Get max order value
+    const maxOrder = await prisma.experience.aggregate({
+      _max: { order: true },
+    })
 
     const experience = await prisma.experience.create({
       data: {
-        ...data,
-        startDate: new Date(data.startDate),
-        endDate: data.endDate ? new Date(data.endDate) : null,
-        order: maxOrder,
+        company: validatedData.company,
+        position: validatedData.position,
+        startDate: new Date(validatedData.startDate),
+        endDate: validatedData.endDate ? new Date(validatedData.endDate) : null,
+        current: validatedData.current ?? false,
+        description: validatedData.description,
+        order: (maxOrder._max.order ?? -1) + 1,
       },
     })
 
     return NextResponse.json(experience)
   } catch (error) {
+    console.error('POST experience error:', error)
     return NextResponse.json(
       { error: 'Failed to create experience' },
       { status: 500 }
