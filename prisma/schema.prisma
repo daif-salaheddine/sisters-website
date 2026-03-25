@@ -1,38 +1,37 @@
 // Prisma Schema - CV Website Database Models
-// SQLite database for simplicity and easy deployment
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // Single profile record (id is always 1)
 model Profile {
-  id          Int      @id @default(1)
-  name        String
-  photo       String?  // Path to profile image
-  jobTitle    String
-  about       String
-  email       String
-  phone       String?
-  location    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(1)
+  name      String
+  photo     String?  // Path to profile image
+  jobTitle  String
+  about     String
+  email     String
+  phone     String?
+  location  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("profile")
 }
 
 // Skills (technical, soft skills, tools)
 model Skill {
-  id          Int     @id @default(autoincrement())
-  name        String
-  level       Int     // 0-100 percentage
-  category    String  // "technical", "soft", "tools"
-  order       Int     @default(0)
+  id       Int    @id @default(autoincrement())
+  name     String
+  level    Int    // 0-100 percentage
+  category String // "technical", "soft", "tools"
+  order    Int    @default(0)
 
   @@map("skills")
 }
@@ -53,36 +52,38 @@ model Experience {
 
 // Education entries
 model Education {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   school      String
   degree      String
   field       String
+  location    String?
   startDate   DateTime
   endDate     DateTime?
+  current     Boolean   @default(false)
   description String?
-  order       Int      @default(0)
+  order       Int       @default(0)
 
   @@map("education")
 }
 
 // Certificates with file uploads
 model Certificate {
-  id          Int      @id @default(autoincrement())
-  title       String
-  issuer      String
-  date        DateTime
-  fileUrl     String?  // Path to uploaded file
-  order       Int      @default(0)
+  id      Int      @id @default(autoincrement())
+  title   String
+  issuer  String
+  date    DateTime
+  fileUrl String? // Path to uploaded file
+  order   Int     @default(0)
 
   @@map("certificates")
 }
 
 // Languages spoken
 model Language {
-  id          Int     @id @default(autoincrement())
-  name        String
-  level       String  // "Native", "Fluent", "Advanced", "Intermediate", "Basic"
-  order       Int     @default(0)
+  id    Int    @id @default(autoincrement())
+  name  String
+  level String // "Native", "Fluent", "Advanced", "Intermediate", "Basic"
+  order Int    @default(0)
 
   @@map("languages")
 }
